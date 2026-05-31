@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>智能监测 - 智慧农业集成平台</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/monitor.css">
+	<link href='https://fonts.googleapis.com/css?family=Arimo:400,700' rel='stylesheet' type='text/css'>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+	<header id="top">
+		<div class="wrapper">
+			<h1 class="logo"><a href="index.html">智慧农业</a></h1>
+			<nav>
+				<ul id="navigation">
+					<li><a href="index.html">返回首页</a></li>
+					<li><a class="nav-cta" href="#" id="refresh-btn">刷新数据</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+	<section class="monitor-hero">
+		<div class="wrapper">
+			<h2>智能监测中心</h2>
+			<p class="subtitle">ESP32 实时土壤湿度 & 温度监测</p>
+			<div class="connection-status" id="connection-status">
+				<span class="status-dot disconnected"></span>
+				<span class="status-text">未连接</span>
+			</div>
+		</div>
+	</section>
+
+	<section class="connection-section">
+		<div class="wrapper">
+			<h3>设备连接</h3>
+			<p class="subtitle">连接到您的 ESP32 设备</p>
+			<div class="connection-panel">
+				<div class="connect-methods">
+					<div class="method-card active" id="method-serial">
+						<h5>USB 串口连接</h5>
+						<p>通过 USB 数据线直连 ESP32，使用 Web Serial API</p>
+						<div class="serial-controls">
+							<button class="button-1" id="connect-serial-btn">连接串口</button>
+							<button class="button-2" id="disconnect-serial-btn" disabled>断开连接</button>
+							<div class="baud-rate">
+								<label>波特率：</label>
+								<select id="baud-rate-select">
+									<option value="9600">9600</option>
+									<option value="115200" selected>115200</option>
+									<option value="230400">230400</option>
+									<option value="921600">921600</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="method-card" id="method-wifi">
+						<h5>WiFi 连接</h5>
+						<p>通过局域网 WebSocket 连接 ESP32</p>
+						<div class="wifi-controls">
+							<input type="text" id="ws-url" value="ws://device-ip:81" placeholder="WebSocket 地址">
+							<button class="button-1" id="connect-ws-btn">连接 WebSocket</button>
+							<button class="button-2" id="disconnect-ws-btn" disabled>断开连接</button>
+						</div>
+					</div>
+					<div class="method-card" id="method-demo">
+						<h5>演示模式</h5>
+						<p>无需硬件，使用模拟数据进行演示</p>
+						<button class="button-1" id="start-demo-btn">启动演示</button>
+						<button class="button-2" id="stop-demo-btn" disabled>停止演示</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="data-section">
+		<div class="wrapper">
+			<h3>实时监测数据</h3>
+			<p class="subtitle">传感器数据实时更新</p>
+			<div class="data-grid">
+				<div class="data-card humidity-card">
+					<div class="card-icon">
+						<img src="images/icon-dashboard.png" alt="湿度">
+					</div>
+					<div class="card-info">
+						<h5>土壤湿度</h5>
+						<div class="data-value">
+							<span class="value" id="humidity-value">--</span>
+							<span class="unit">%</span>
+						</div>
+						<div class="progress-bar-container">
+							<div class="progress-bar" id="humidity-bar" style="width: 0%;"></div>
+						</div>
+						<div class="data-status" id="humidity-status">等待数据...</div>
+					</div>
+				</div>
+				<div class="data-card temperature-card">
+					<div class="card-icon">
+						<img src="images/icon-clock.png" alt="温度">
+					</div>
+					<div class="card-info">
+						<h5>土壤温度</h5>
+						<div class="data-value">
+							<span class="value" id="temperature-value">--</span>
+							<span class="unit">&deg;C</span>
+						</div>
+						<div class="progress-bar-container">
+							<div class="progress-bar temp-bar" id="temperature-bar" style="width: 0%;"></div>
+						</div>
+						<div class="data-status" id="temperature-status">等待数据...</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="chart-section">
+				<h4>历史数据趋势</h4>
+				<div class="chart-container">
+					<canvas id="data-chart" width="800" height="400"></canvas>
+				</div>
+			</div>
+
+			<div class="data-log-section">
+				<h4>数据日志</h4>
+				<div class="log-container" id="log-container">
+					<div class="log-empty">等待设备连接和数据传输...</div>
+				</div>
+				<button class="button-2" id="clear-log-btn">清空日志</button>
+			</div>
+		</div>
+	</section>
+
+	<section class="device-info-section">
+		<div class="wrapper">
+			<h3>ESP32 接线指南</h3>
+			<p class="subtitle">硬件连接与配置说明</p>
+			<div class="info-grid">
+				<div class="info-card">
+					<h5>传感器接线</h5>
+					<table class="wiring-table">
+						<tr><th>传感器引脚</th><th>ESP32 引脚</th></tr>
+						<tr><td>VCC</td><td>3.3V / 5V</td></tr>
+						<tr><td>GND</td><td>GND</td></tr>
+						<tr><td>湿度传感器 A0</td><td>GPIO 34 (ADC)</td></tr>
+						<tr><td>温度传感器 DQ</td><td>GPIO 4 (OneWire)</td></tr>
+					</table>
+				</div>
+				<div class="info-card">
+					<h5>固件协议说明</h5>
+					<p>ESP32 需烧录固件，通过串口以 <strong>JSON</strong> 格式每秒发送数据：</p>
+					<pre class="code-block">{
+  "humidity": 65.2,
+  "temperature": 24.8,
+  "timestamp": 1717123456
+}</pre>
+					<p>或通过 <strong>WebSocket</strong> 在端口 81 上广播相同格式的 JSON 数据。</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<footer>
+		<div class="wrapper">
+			<a class="logo" href="index.html">智慧农业</a>
+			<div class="footer-left">
+				<p class="copyright">版权所有 &copy; 2026 智慧农业集成平台 - 智能监测中心</p>
+			</div>
+			<div class="footer-right">
+				<a href="index.html" class="back-link">← 返回主页面</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</footer>
+
+	<script src="js/monitor.js"></script>
+</body>
+</html>
