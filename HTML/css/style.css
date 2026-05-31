@@ -63,12 +63,12 @@ ul, li {
 
 a {
 	text-decoration: none; 
-	color: #5dae87;
+	color: #2E7D32;
 }
 
 a:hover {
 	text-decoration: none; 
-	color: #42966e;
+	color: #1B5E20;
 }
 
 ::selection {
@@ -107,8 +107,8 @@ input[type=text] {
 
 a.button-1, a.button-2, button {
 	color: #fff;
-	background: #5dae87;
-	border: 2px solid #5dae87;
+	background: #2E7D32;
+	border: 2px solid #2E7D32;
 	border-radius: 999px;
 	margin-top: -2px;
 	margin-left: 10px;
@@ -125,8 +125,8 @@ a.button-1, a.button-2, button {
 }
 
 a.button-1:hover {
-	border-color: #42966e;
-	background: #42966e;
+	border-color: #388E3C;
+	background: #388E3C;
 }
 
 a.button-2 {
@@ -194,8 +194,8 @@ header#top nav ul li a:hover {
 }
 
 header#top nav ul li a.nav-cta {
-	color: #5dae87;
-	border: 2px solid #5dae87;
+	color: #2E7D32;
+	border: 2px solid #2E7D32;
 	border-radius: 999px;
 	margin-top: -2px;
 	margin-left: 10px;
@@ -232,7 +232,7 @@ header#top nav ul li a.nav-cta {
 
 #banner {
 	height: 840px;
-	background: #f1f6f4 url(../images/header-image.jpg) no-repeat center;
+	background: #E8F5E9 url(../images/header-image.jpg) no-repeat center;
 	position: relative;
 	padding: 1px 0 0 0;
 }
@@ -294,7 +294,7 @@ header#top nav ul li a.nav-cta {
 }
 
 .video-section p.subtitle {
-	color: #5dae87;
+	color: #2E7D32;
 	font-size: 17px;
 }
 
@@ -312,11 +312,11 @@ header#top nav ul li a.nav-cta {
 .services-section {
 	text-align: center;
 	padding: 100px 0;
-	background: #f9f9f9;
+	background: #F1F8E9;
 }
 
 .services-section p.subtitle {
-	color: #5dae87;
+	color: #2E7D32;
 	font-size: 17px;
 }
 
@@ -342,7 +342,7 @@ ul.services-list li .image-container {
 	width: 100px;
 	height: 100px;
 	margin: 0 auto 40px auto;
-	background: #f9f9f9;
+	background: #E8F5E9;
 	border-radius: 999px;
 	position: relative;
 }
@@ -362,11 +362,11 @@ ul.services-list li a {
 	font-family: 'Arimo', sans-serif;
 	text-transform: uppercase;
 	font-weight: 700;
-	color: #5dae87;
+	color: #2E7D32;
 }
 
 ul.services-list li a:hover {
-	color: #42966e;
+	color: #1B5E20;
 }
 
 ul.services-list li:first-of-type {
@@ -396,7 +396,7 @@ ul.services-list li:last-of-type {
 
 .text-section p.subtitle {
 	text-align: left;
-	color: #5dae87;
+	color: #2E7D32;
 	font-size: 17px;
 	margin-bottom: 40px;
 }
@@ -481,7 +481,7 @@ ul.list-checkmarks li {
 /*Features Section*/
 
 .features-section {
-	background: #5dae87;
+	background: #2E7D32;
 	padding: 100px 0;
 	color: #fff;
 }
@@ -491,7 +491,7 @@ ul.list-checkmarks li {
 }
 
 .features-section p {
-	color: #bfeed7;
+	color: #C8E6C9;
 }
 
 .features-section ul.feature-squares {
@@ -532,11 +532,11 @@ ul.list-checkmarks li {
 .team-section {
 	text-align: center;
 	padding: 100px 0;
-	background: #f9f9f9;
+	background: #F1F8E9;
 }
 
 .team-section p.subtitle {
-	color: #5dae87;
+	color: #2E7D32;
 	font-size: 17px;
 }
 
@@ -600,7 +600,7 @@ ul.social-links li a {
 }
 
 ul.social-links li a:hover {
-	background-color: #5dae87;
+	background-color: #2E7D32;
 }
 
 ul.social-links li a.facebook {
@@ -618,7 +618,7 @@ ul.social-links li:hover {
 }
 
 ul.team-list li a:hover {
-	color: #42966e;
+	color: #1B5E20;
 }
 
 ul.team-list li:first-of-type {
@@ -655,7 +655,7 @@ ul.team-list li:last-of-type {
 }
 
 .portfolio-section p.subtitle {
-	color: #5dae87;
+	color: #2E7D32;
 	font-size: 17px;
 }
 
@@ -696,18 +696,18 @@ ul.portfolio-list li a:hover {
 /*Email List Section*/
 
 .email-list-section {
-	background: #5dae87;
+	background: #2E7D32;
 	padding: 100px 0;
 	color: #fff;
 }
-	
+
 .email-list-section h3 {
 	color: #fff;
 	text-align: center;
 }
 
 .email-list-section p.subtitle {
-	color: #bfeed7;
+	color: #C8E6C9;
 	font-size: 17px;
 }
 
@@ -718,7 +718,7 @@ ul.portfolio-list li a:hover {
 }
 
 .email-list-section input[type=text] {
-	background: #5dae87;
+	background: #2E7D32;
 	color: #fff;
 	color: rgba(255, 255, 255, .75);
 	border: 2px solid #eee;
@@ -732,7 +732,7 @@ ul.portfolio-list li a:hover {
 
 .email-list-section button {
 	background: #fff;
-	color: #5dae87;
+	color: #2E7D32;
 	margin: 10px 5px;
 }
 
@@ -741,11 +741,11 @@ ul.portfolio-list li a:hover {
 .pricing-section {
 	text-align: center;
 	padding: 100px 0;
-	background: #f9f9f9;
+	background: #F1F8E9;
 }
 
 .pricing-section p.subtitle {
-	color: #5dae87;
+	color: #2E7D32;
 	font-size: 17px;
 }
 
@@ -800,11 +800,11 @@ ul.pricing-table li a {
 	font-family: 'Arimo', sans-serif;
 	text-transform: uppercase;
 	font-weight: 700;
-	color: #5dae87;
+	color: #2E7D32;
 }
 
 ul.pricing-table li a:hover {
-	color: #42966e;
+	color: #1B5E20;
 }
 
 ul.pricing-table li:first-of-type {
@@ -821,7 +821,7 @@ ul.pricing-table ul.features {
 
 ul.pricing-table .button-1 {
 	color: #fff;
-	border-color: #5dae87;
+	border-color: #2E7D32;
 }
 
 ul.pricing-table .button-2 {
@@ -831,8 +831,8 @@ ul.pricing-table .button-2 {
 
 ul.pricing-table .button-1:hover {
 	color: #fff;
-	background-color: #42966e;
-	border-color: #42966e;
+	background-color: #388E3C;
+	border-color: #388E3C;
 }
 
 ul.pricing-table .button-2:hover {
@@ -919,7 +919,7 @@ footer .footer-links a {
 }
 
 footer .footer-links a:hover {
-	color: #5dae87;
+	color: #4CAF50;
 }
 
 footer .footer-links a:first-of-type {
@@ -940,7 +940,7 @@ footer .footer-right a.social {
 }
 
 footer .footer-right a.social:hover {
-	background-color: #5dae87;
+	background-color: #2E7D32;
 }
 
 footer a.social.facebook {
