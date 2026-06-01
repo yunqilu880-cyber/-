@@ -11,8 +11,8 @@ require('dotenv').config();
 router.post(
   '/register',
   [
-    body('phone').matches(/^1[3-9]\d{9}$/).withMessage('请输入正确的手机号'),
-    body('password').isLength({ min: 6 }).withMessage('密码至少6位'),
+    body('username').isLength({ min: 1 }).withMessage('请输入账号'),
+    body('password').isLength({ min: 1 }).withMessage('请输入密码'),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -20,22 +20,22 @@ router.post(
       return res.status(400).json({ code: 400, msg: errors.array()[0].msg });
     }
 
-    const { phone, password, name } = req.body;
+    const { username, password, name } = req.body;
     try {
-      const [existing] = await pool.query('SELECT id FROM users WHERE phone = ?', [phone]);
+      const [existing] = await pool.query('SELECT id FROM users WHERE username = ?', [username]);
       if (existing.length > 0) {
-        return res.status(400).json({ code: 400, msg: '该手机号已注册' });
+        return res.status(400).json({ code: 400, msg: '该账号已注册' });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const [result] = await pool.query(
-        'INSERT INTO users (phone, password, name) VALUES (?, ?, ?)',
-        [phone, hashedPassword, name || phone.slice(-4) + '用户']
+        'INSERT INTO users (username, password, name) VALUES (?, ?, ?)',
+        [username, hashedPassword, name || username]
       );
 
       const token = jwt.sign(
-        { userId: result.insertId, phone },
+        { userId: result.insertId, username },
         process.env.JWT_SECRET,
         { expiresIn: '7d' }
       );
@@ -45,7 +45,7 @@ router.post(
         msg: '注册成功',
         data: {
           token,
-          user: { id: result.insertId, phone, name: name || phone.slice(-4) + '用户' },
+          user: { id: result.insertId, username, name: name || username },
         },
       });
     } catch (err) {
@@ -59,8 +59,8 @@ router.post(
 router.post(
   '/login',
   [
-    body('phone').matches(/^1[3-9]\d{9}$/).withMessage('请输入正确的手机号'),
-    body('password').isLength({ min: 6 }).withMessage('密码至少6位'),
+    body('username').notEmpty().withMessage('请输入账号'),
+    body('password').notEmpty().withMessage('请输入密码'),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -68,11 +68,11 @@ router.post(
       return res.status(400).json({ code: 400, msg: errors.array()[0].msg });
     }
 
-    const { phone, password } = req.body;
+    const { username, password } = req.body;
     try {
-      const [rows] = await pool.query('SELECT * FROM users WHERE phone = ?', [phone]);
+      const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
       if (rows.length === 0) {
-        return res.status(400).json({ code: 400, msg: '手机号未注册' });
+        return res.status(400).json({ code: 400, msg: '账号不存在' });
       }
 
       const user = rows[0];
@@ -82,7 +82,7 @@ router.post(
       }
 
       const token = jwt.sign(
-        { userId: user.id, phone: user.phone },
+        { userId: user.id, username: user.username },
         process.env.JWT_SECRET,
         { expiresIn: '7d' }
       );
@@ -92,7 +92,7 @@ router.post(
         msg: '登录成功',
         data: {
           token,
-          user: { id: user.id, phone: user.phone, name: user.name, avatar: user.avatar },
+          user: { id: user.id, username: user.username, name: user.name, avatar: user.avatar },
         },
       });
     } catch (err) {
@@ -106,7 +106,7 @@ router.post(
 router.get('/me', authMiddleware, async (req, res) => {
   try {
     const [rows] = await pool.query(
-      'SELECT id, phone, name, avatar, role, created_at FROM users WHERE id = ?',
+      'SELECT id, username, name, avatar, role, created_at FROM users WHERE id = ?',
       [req.userId]
     );
     if (rows.length === 0) {

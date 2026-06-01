@@ -207,7 +207,7 @@
 		<div class="wrapper">
 			<div class="avatar" id="userAvatar">👤</div>
 			<h2 id="userName">用户</h2>
-			<p id="userPhone">加载中...</p>
+			<p id="userUsername">加载中...</p>
 		</div>
 	</section>
 
@@ -291,7 +291,7 @@
 		// 更新用户信息显示
 		if (user) {
 			document.getElementById('userName').textContent = user.name || '用户';
-			document.getElementById('userPhone').textContent = user.phone;
+			document.getElementById('userUsername').textContent = user.username;
 			document.getElementById('userAvatar').textContent = (user.name || '用')[0];
 			document.getElementById('profileName').value = user.name || '';
 		}
