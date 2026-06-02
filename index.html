@@ -11,38 +11,39 @@
 	
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
 	<script type="text/javascript" src="js/featherlight.min.js"></script>
+	<script src="js/i18n.js"></script>
 	<script src="js/auth-ui.js"></script>
 </head>
 <body>
 	<header id="top">
 		<div class="wrapper">
-			<h1 class="logo"><a href="#">智慧农业</a></h1>
+			<h1 class="logo"><a href="#" data-i18n="brand.name">智慧农业</a></h1>
 			<nav>
 				<ul id="navigation">
-					<li><a href="#home">首页</a></li>
-					<li><a href="monitor.html">种植助手</a></li>
-					<li><a href="shop.html">电商直销</a></li>
-					<li><a href="logistics.html">物流协同</a></li>
-					<li><a class="nav-cta" href="login.html">登录/注册</a></li>
+					<li><a href="#home" data-i18n="nav.home">首页</a></li>
+					<li><a href="monitor.html" data-i18n="nav.monitor">种植助手</a></li>
+					<li><a href="shop.html" data-i18n="nav.shop">电商直销</a></li>
+					<li><a href="logistics.html" data-i18n="nav.logistics">物流协同</a></li>
+					<li><a class="nav-cta" href="login.html" data-i18n="nav.login">登录/注册</a></li>
 				</ul>
 			</nav>
 		</div>
 	</header>
 	<section id="banner"><a name="home"></a>
 		<div class="wrapper">
-			<h2>智慧农业</h2>
-			<p class="subtitle">科技赋能农业，数据驱动未来</p>
+			<h2 data-i18n="home.title">智慧农业</h2>
+			<p class="subtitle" data-i18n="home.subtitle">科技赋能农业，数据驱动未来</p>
 			<div class="buttons">
-				<a href="monitor.html" class="button-1">查看监测方案</a>
-				<a href="#services" class="button-2">了解更多</a>
+				<a href="monitor.html" class="button-1" data-i18n="home.btn_monitor">查看监测方案</a>
+				<a href="#services" class="button-2" data-i18n="home.btn_learn">了解更多</a>
 			</div>
 		</div>
 	</section>
 	
 	<section class="video-section">	
 		<div class="wrapper">
-			<h3>什么是智慧农业集成平台？</h3>
-			<p class="subtitle">观看平台介绍视频</p>
+			<h3 data-i18n="home.video_title">什么是智慧农业集成平台？</h3>
+			<p class="subtitle" data-i18n="home.video_subtitle">观看平台介绍视频</p>
 			<video width="790" src="video.mp4" poster="images/video-poster.jpg" onclick="this.play();" controls preload>
 				<p>您的浏览器不支持视频播放</p>
 			</video>
@@ -51,32 +52,32 @@
 	
 	<section class="services-section"><a name="services"></a>
 		<div class="wrapper">
-			<h3>核心功能</h3>
-			<p class="subtitle">「1 平台 + 3 模块」轻量级助农方案</p>
+			<h3 data-i18n="home.services_title">核心功能</h3>
+			<p class="subtitle" data-i18n="home.services_subtitle">「1 平台 + 3 模块」轻量级助农方案</p>
 			<ul class="services-list">
 				<li>
 					<div class="image-container">
 						<img src="images/icon-eye.png" alt="功能图标" >
 					</div>
-					<h5>种植助手</h5>
-					<p>ESP32 低成本 IoT 监测 + AI 采收建议，单户投入仅 60 元，帮助梅农把握最佳采收窗口，告别"靠天收"。</p>
-					<a href="monitor.html">了解监测方案</a>
+					<h5 data-i18n="home.service_1_title">种植助手</h5>
+					<p data-i18n="home.service_1_desc">ESP32 低成本 IoT 监测 + AI 采收建议，单户投入仅 60 元，帮助梅农把握最佳采收窗口，告别"靠天收"。</p>
+					<a href="monitor.html" data-i18n="home.service_1_link">了解监测方案</a>
 				</li>
 				<li>
 					<div class="image-container">
 						<img src="images/icon-dashboard.png" alt="功能图标" >
 					</div>
-					<h5>电商直销</h5>
-					<p>微信小程序 + 大学生直播矩阵，打通产地到消费者直销渠道，让农户获得更高售价，消费者获得更新鲜的产品。</p>
-					<a href="shop.html">了解电商方案</a>
+					<h5 data-i18n="home.service_2_title">电商直销</h5>
+					<p data-i18n="home.service_2_desc">微信小程序 + 大学生直播矩阵，打通产地到消费者直销渠道，让农户获得更高售价，消费者获得更新鲜的产品。</p>
+					<a href="shop.html" data-i18n="home.service_2_link">了解电商方案</a>
 				</li>
 				<li>
 					<div class="image-container">
 						<img src="images/icon-headset.png" alt="功能图标" >
 					</div>
-					<h5>物流协同</h5>
-					<p>村级集单 + 简易保鲜方案，单件成本仅 3-5 元，保鲜期延长至 3-4 天，覆盖次日达配送需求。</p>
-					<a href="logistics.html">了解物流方案</a>
+					<h5 data-i18n="home.service_3_title">物流协同</h5>
+					<p data-i18n="home.service_3_desc">村级集单 + 简易保鲜方案，单件成本仅 3-5 元，保鲜期延长至 3-4 天，覆盖次日达配送需求。</p>
+					<a href="logistics.html" data-i18n="home.service_3_link">了解物流方案</a>
 				</li>
 				<div class="clear"></div>
 			</ul>
@@ -89,10 +90,10 @@
 				<img src="images/light-bulb.png" alt="智慧农业" class="align-left">
 			</div>
 			<div class="text align-left">
-				<h3>科技与农业的融合</h3>
-				<p class="subtitle">让传统杨梅产业插上科技的翅膀</p>
-				<p>余姚素有"中国杨梅之乡"之称，杨梅种植面积约 10 万亩，年产量约 3 万吨。我们致力于将物联网、大数据等前沿技术与杨梅产业深度融合，为散户梅农提供用得起、用得上的数字化解决方案。</p>
-				<p>从种植端的精准采收建议，到销售端的产地直供渠道，我们覆盖杨梅产业链关键环节，帮助梅农实现"种得好、卖得上价"。</p>
+				<h3 data-i18n="home.fusion_title">科技与农业的融合</h3>
+				<p class="subtitle" data-i18n="home.fusion_subtitle">让传统杨梅产业插上科技的翅膀</p>
+				<p data-i18n="home.fusion_p1">余姚素有"中国杨梅之乡"之称，杨梅种植面积约 10 万亩，年产量约 3 万吨。我们致力于将物联网、大数据等前沿技术与杨梅产业深度融合，为散户梅农提供用得起、用得上的数字化解决方案。</p>
+				<p data-i18n="home.fusion_p2">从种植端的精准采收建议，到销售端的产地直供渠道，我们覆盖杨梅产业链关键环节，帮助梅农实现"种得好、卖得上价"。</p>
 			</div>
 			<div class="clear"></div>	
 		</div>
@@ -106,8 +107,8 @@
 						<img src="images/icon-eye.png" alt="功能图标">
 					</div>
 					<div class="text">
-						<h5>低成本 IoT</h5>
-						<p>ESP32 + 土壤传感器方案，单户投入仅 60 元，是传统方案的 1/50，让散户梅农零门槛参与数字化。</p>
+						<h5 data-i18n="home.feat_1_title">低成本 IoT</h5>
+						<p data-i18n="home.feat_1_desc">ESP32 + 土壤传感器方案，单户投入仅 60 元，是传统方案的 1/50，让散户梅农零门槛参与数字化。</p>
 					</div>
 				</li>
 				<li>
@@ -115,8 +116,8 @@
 						<img src="images/icon-clock.png" alt="功能图标">
 					</div>
 					<div class="text">
-						<h5>智能预警</h5>
-						<p>基于积温模型 + 土壤湿度阈值，微信服务通知推送采收建议，帮助梅农把握 3-5 天最佳采收窗口。</p>
+						<h5 data-i18n="home.feat_2_title">智能预警</h5>
+						<p data-i18n="home.feat_2_desc">基于积温模型 + 土壤湿度阈值，微信服务通知推送采收建议，帮助梅农把握 3-5 天最佳采收窗口。</p>
 					</div>
 				</li>
 				<li>
@@ -124,8 +125,8 @@
 						<img src="images/icon-dashboard.png" alt="功能图标">
 					</div>
 					<div class="text">
-						<h5>数据闭环</h5>
-						<p>种植端 IoT 数据与销售端消费数据互通，从"种什么卖什么"转变为"卖什么种什么"，实现 C2B 反向定制。</p>
+						<h5 data-i18n="home.feat_3_title">数据闭环</h5>
+						<p data-i18n="home.feat_3_desc">种植端 IoT 数据与销售端消费数据互通，从"种什么卖什么"转变为"卖什么种什么"，实现 C2B 反向定制。</p>
 					</div>
 				</li>
 				<li>
@@ -133,8 +134,8 @@
 						<img src="images/icon-headset.png" alt="功能图标">
 					</div>
 					<div class="text">
-						<h5>三方协作模式</h5>
-						<p>高校技术供给 + 村集体组织协调 + 农户参与受益，轻资产模型可快速复制至其他乡镇或品类。</p>
+						<h5 data-i18n="home.feat_4_title">三方协作模式</h5>
+						<p data-i18n="home.feat_4_desc">高校技术供给 + 村集体组织协调 + 农户参与受益，轻资产模型可快速复制至其他乡镇或品类。</p>
 					</div>
 				</li>
 				<div class="clear"></div>	
@@ -148,14 +149,14 @@
 				<img src="images/chat-bubbles.png" alt="沟通协作" class="align-left" style="margin-top: 60px;">
 			</div>
 			<div class="text align-right">
-				<h3>合作模式</h3>
-				<p class="subtitle">高校 × 村集体 × 农户，三方协作共赢</p>
-				<p>项目采用轻资产协作模型：高校提供技术开发和电商运营能力，村集体提供组织协调和信任背书，农户提供产品和劳动力。三方各司其职，无需自建重资产，可快速复制。</p>
+				<h3 data-i18n="home.coop_title">合作模式</h3>
+				<p class="subtitle" data-i18n="home.coop_subtitle">高校 × 村集体 × 农户，三方协作共赢</p>
+				<p data-i18n="home.coop_desc">项目采用轻资产协作模型：高校提供技术开发和电商运营能力，村集体提供组织协调和信任背书，农户提供产品和劳动力。三方各司其职，无需自建重资产，可快速复制。</p>
 				<ul class="list-checkmarks">
-					<li>60 元低成本 IoT 设备，降低 90% 以上技术门槛</li>
-					<li>微信小程序直销渠道，农户直供，去中间化</li>
-					<li>村级集单点 + 简易保鲜方案，降低物流成本 30%</li>
-					<li>首期试点 1 村 5-10 户，验证后逐步推广</li>
+					<li data-i18n="home.coop_1">60 元低成本 IoT 设备，降低 90% 以上技术门槛</li>
+					<li data-i18n="home.coop_2">微信小程序直销渠道，农户直供，去中间化</li>
+					<li data-i18n="home.coop_3">村级集单点 + 简易保鲜方案，降低物流成本 30%</li>
+					<li data-i18n="home.coop_4">首期试点 1 村 5-10 户，验证后逐步推广</li>
 				</ul>
 			</div>
 			<div class="clear"></div>	
@@ -164,29 +165,29 @@
 	
 	<section class="team-section"><a name="about"></a>
 		<div class="wrapper">
-			<h3>核心团队</h3>
-			<p class="subtitle">浙江工商大学跨学科团队，能力互补</p>
+			<h3 data-i18n="home.team_title">核心团队</h3>
+			<p class="subtitle" data-i18n="home.team_subtitle">浙江工商大学跨学科团队，能力互补</p>
 			<ul class="team-list">
 				<li>
 					<div class="image-container">
 						<img src="images/team-1.jpg" alt="团队成员" >
 					</div>
-					<h5>陆云琪</h5>
-					<p>项目负责人</p>
+					<h5 data-i18n="home.team_1_name">陆云琪</h5>
+					<p data-i18n="home.team_1_role">项目负责人</p>
 				</li>
 				<li>
 					<div class="image-container">
 						<img src="images/team-2.jpg" alt="团队成员" >
 					</div>
-					<h5>李继</h5>
-					<p>嵌入式开发工程师</p>
+					<h5 data-i18n="home.team_2_name">李继</h5>
+					<p data-i18n="home.team_2_role">嵌入式开发工程师</p>
 				</li>
 				<li>
 					<div class="image-container">
 						<img src="images/team-3.jpg" alt="团队成员" >
 					</div>
-					<h5>谢安东</h5>
-					<p>小程序前端开发</p>
+					<h5 data-i18n="home.team_3_name">谢安东</h5>
+					<p data-i18n="home.team_3_role">小程序前端开发</p>
 				</li>
 				<div class="clear"></div>
 			</ul>
@@ -195,32 +196,32 @@
 					<div class="image-container">
 						<img src="images/team-1.jpg" alt="团队成员" >
 					</div>
-					<h5>胡杨</h5>
-					<p>新媒体运营</p>
+					<h5 data-i18n="home.team_4_name">胡杨</h5>
+					<p data-i18n="home.team_4_role">新媒体运营</p>
 				</li>
 				<li>
 					<div class="image-container">
 						<img src="images/team-2.jpg" alt="团队成员" >
 					</div>
-					<h5>张钦淏</h5>
-					<p>视觉设计与内容制作</p>
+					<h5 data-i18n="home.team_5_name">张钦淏</h5>
+					<p data-i18n="home.team_5_role">视觉设计与内容制作</p>
 				</li>
 				<li>
 					<div class="image-container">
 						<img src="images/team-3.jpg" alt="团队成员" >
 					</div>
-					<h5>吴亦枫</h5>
-					<p>市场调研与财务分析</p>
+					<h5 data-i18n="home.team_6_name">吴亦枫</h5>
+					<p data-i18n="home.team_6_role">市场调研与财务分析</p>
 				</li>
 				<div class="clear"></div>
 			</ul>
-			<p style="text-align: center; margin-top: 40px; color: #777;">指导老师：董黎刚</p>
+			<p style="text-align: center; margin-top: 40px; color: #777;" data-i18n="home.advisor">指导老师：董黎刚</p>
 		</div>
 	</section>
 	
 	<section class="portfolio-section"><a name="portfolio"></a>
-		<h3>应用案例</h3>
-		<p class="subtitle">我们的成功实践</p>
+		<h3 data-i18n="home.cases_title">应用案例</h3>
+		<p class="subtitle" data-i18n="home.cases_subtitle">我们的成功实践</p>
 		
 		<ul class="portfolio-list"> 
 			<li class="item">
@@ -258,61 +259,61 @@
 	</section>
 	
 	<section class="email-list-section">
-		<h3>合作咨询</h3>
-		<p class="subtitle">如果您是杨梅产区村委、合作社或意向合作农户，欢迎联系我们</p>
+		<h3 data-i18n="home.contact_title">合作咨询</h3>
+		<p class="subtitle" data-i18n="home.contact_subtitle">如果您是杨梅产区村委、合作社或意向合作农户，欢迎联系我们</p>
 		<form>
-			<input type="text" value="您的姓名">
-			<input type="text" value="联系方式">
-			<button type="submit" title="Submit">提交</button>
+			<input type="text" data-i18n-value="home.contact_name" value="您的姓名">
+			<input type="text" data-i18n-value="home.contact_phone" value="联系方式">
+			<button type="submit" title="Submit" data-i18n="home.contact_submit">提交</button>
 		</form>
 	</section>
 	
 	<section class="pricing-section">
 		<div class="wrapper">
-			<h3>商业模式</h3>
-			<p class="subtitle">三种收入来源覆盖运营成本，实现可持续造血</p>
+			<h3 data-i18n="home.biz_title">商业模式</h3>
+			<p class="subtitle" data-i18n="home.biz_subtitle">三种收入来源覆盖运营成本，实现可持续造血</p>
 			<ul class="pricing-table">
 				<li>
 					<div class="price-container">
-						<span class="price" style="font-size: 50px;">品牌联名</span>
+						<span class="price" style="font-size: 50px;" data-i18n="home.biz_1_badge">品牌联名</span>
 					</div>
-					<h5>杨梅礼盒直销</h5>
+					<h5 data-i18n="home.biz_1_title">杨梅礼盒直销</h5>
 					<ul class="features">
-						<li>统一视觉品牌包装设计</li>
-						<li>产地故事 + 品质分级标准</li>
-						<li>3斤装终端售价 80-120 元</li>
-						<li>平台差价分润，农户增收</li>
+						<li data-i18n="home.biz_1_1">统一视觉品牌包装设计</li>
+						<li data-i18n="home.biz_1_2">产地故事 + 品质分级标准</li>
+						<li data-i18n="home.biz_1_3">3斤装终端售价 80-120 元</li>
+						<li data-i18n="home.biz_1_4">平台差价分润，农户增收</li>
 						<div class="clear"></div>
 					</ul>
-					<a href="#" class="button-2">了解详情</a>
+					<a href="#" class="button-2" data-i18n="home.biz_detail">了解详情</a>
 				</li>
 				<li>
 					<div class="price-container">
-						<span class="price" style="font-size: 50px;">直播带货</span>
+						<span class="price" style="font-size: 50px;" data-i18n="home.biz_2_badge">直播带货</span>
 					</div>
-					<h5>自然佣金收益</h5>
+					<h5 data-i18n="home.biz_2_title">自然佣金收益</h5>
 					<ul class="features">
-						<li>抖音 + 视频号双平台</li>
-						<li>每 2 周 1 场原产地溯源直播</li>
-						<li>大学生团队内容创作</li>
-						<li>平台自带佣金机制，零额外成本</li>
+						<li data-i18n="home.biz_2_1">抖音 + 视频号双平台</li>
+						<li data-i18n="home.biz_2_2">每 2 周 1 场原产地溯源直播</li>
+						<li data-i18n="home.biz_2_3">大学生团队内容创作</li>
+						<li data-i18n="home.biz_2_4">平台自带佣金机制，零额外成本</li>
 						<div class="clear"></div>
 					</ul>
-					<a href="#" class="button-1">了解详情</a>
+					<a href="#" class="button-1" data-i18n="home.biz_detail">了解详情</a>
 				</li>
 				<li>
 					<div class="price-container">
-						<span class="price" style="font-size: 50px;">B端服务</span>
+						<span class="price" style="font-size: 50px;" data-i18n="home.biz_3_badge">B端服务</span>
 					</div>
-					<h5>企业采购对接</h5>
+					<h5 data-i18n="home.biz_3_title">企业采购对接</h5>
 					<ul class="features">
-						<li>校内食堂 + 学校工会福利</li>
-						<li>企事业单位节日采购对接</li>
-						<li>单次采购额 5,000-20,000 元</li>
-						<li>收取 3%-5% 对接服务费</li>
+						<li data-i18n="home.biz_3_1">校内食堂 + 学校工会福利</li>
+						<li data-i18n="home.biz_3_2">企事业单位节日采购对接</li>
+						<li data-i18n="home.biz_3_3">单次采购额 5,000-20,000 元</li>
+						<li data-i18n="home.biz_3_4">收取 3%-5% 对接服务费</li>
 						<div class="clear"></div>
 					</ul>
-					<a href="#" class="button-2">了解详情</a>
+					<a href="#" class="button-2" data-i18n="home.biz_detail">了解详情</a>
 				</li>
 				<div class="clear"></div>
 			</ul>
@@ -321,18 +322,18 @@
 	
 	<section class="text-section">
 		<div class="text align-center">
-			<h3>加入我们</h3>
-			<p class="subtitle">让每一颗杨梅都卖出好价钱</p>
-			<p><a href="monitor.html" class="button-1">查看监测方案</a></p>
+			<h3 data-i18n="home.join_title">加入我们</h3>
+			<p class="subtitle" data-i18n="home.join_subtitle">让每一颗杨梅都卖出好价钱</p>
+			<p><a href="monitor.html" class="button-1" data-i18n="home.join_btn">查看监测方案</a></p>
 		</div>
 	</section>
 
 	<footer>
 		<div class="wrapper">
-			<a class="logo" href="#">智慧农业</a>
+			<a class="logo" href="#" data-i18n="brand.name">智慧农业</a>
 			<div class="footer-left">
-				<p class="copyright">版权所有 &copy; 2026 智慧农业集成平台</p>
-				<p class="footer-links"><a href="#">联系我们</a> I <a href="#">服务条款</a> I<a href="#">隐私政策</a></p>
+				<p class="copyright" data-i18n="home.footer_copyright">版权所有 &copy; 2026 智慧农业集成平台</p>
+				<p class="footer-links"><a href="#" data-i18n="home.footer_contact">联系我们</a> I <a href="#" data-i18n="home.footer_terms">服务条款</a> I<a href="#" data-i18n="home.footer_privacy">隐私政策</a></p>
 			</div>
 			
 			<div class="clear"></div>
