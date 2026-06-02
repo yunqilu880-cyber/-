@@ -499,7 +499,24 @@
   // 页面加载时自动应用
   document.addEventListener('DOMContentLoaded', () => {
     applyLang(getLang());
+    // 初始化语言切换按钮事件
+    initLangSwitchers();
   });
+
+  // 绑定语言切换按钮的点击事件
+  function initLangSwitchers() {
+    document.querySelectorAll('.lang-switch').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const currentLang = getLang();
+        const newLang = currentLang === 'zh' ? 'en' : 'zh';
+        setLang(newLang);
+        // 更新所有切换按钮文本
+        document.querySelectorAll('.lang-switch').forEach(b => {
+          b.textContent = newLang === 'zh' ? 'EN' : '中';
+        });
+      });
+    });
+  }
 
   // 暴露到全局
   window.i18n = { getLang, setLang, t, applyLang, dict };

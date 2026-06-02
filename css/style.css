@@ -96,7 +96,6 @@ input[type=text] {
 	width: 280px;
 	font-family: 'Arimo', sans-serif;
 	font-weight: 700;
-	text-transform: uppercase;
 }
 
 .buttons {
@@ -982,4 +981,24 @@ footer a.social.google {
 		margin: 0 5px!important;
 		font-size: 14px;
 	}
+}
+
+/* ==========================================
+   语言切换按钮
+   ========================================== */
+.lang-switch {
+	display: inline-block;
+	float: left;
+	margin: 65px 16px 0 40px;
+	background: #2E7D32;
+	color: #fff;
+	padding: 6px 16px;
+	border-radius: 999px;
+	font-weight: 700;
+	font-size: 13px;
+	text-decoration: none;
+	transition: background 0.2s;
+}
+.lang-switch:hover {
+	background: #1B5E20;
 }
