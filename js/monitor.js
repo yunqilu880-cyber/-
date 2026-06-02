@@ -435,29 +435,36 @@
 	}
 
 	// ============ Demo Mode - 真实梅园数据模拟 ============
-	// 模拟浙江余姚地区 6 月杨梅园数据
-	// 日变化规律：清晨凉爽湿润 → 正午高温干燥 → 夜间降温回湿
+	// 模拟浙江余姚地区 6 月杨梅园土壤温湿度
+	// 日变化：凌晨4点最冷(~22°C)最湿(~82%) → 午后16点最热(~34°C)最干(~42%)
 
-	/** 根据小时返回基准温湿度（模拟夏季晴天） */
+	/** 
+	 * 根据小时返回基准温湿度
+	 * soil temperature peaks at ~16:00 (thermal lag after air temp peak at 14:00)
+	 * humidity is inverse of temperature curve
+	 */
 	function getBaseValue(hour) {
-		// 温度曲线：凌晨最低(~18°C)，午后最高(~33°C)
-		// 使用正弦波模拟日照变化
-		const tempPeak = 33;     // 午后最高温
-		const tempBase = 18;     // 凌晨最低温
-		// 峰值在 14:00
-		const tempSin = Math.sin((hour - 8) / 14 * Math.PI);
-		const temperature = tempBase + (tempPeak - tempBase) * Math.max(0, tempSin);
+		// ---- 土壤温度 ----
+		// 正弦波，周期24h，峰值 16:00，谷值 04:00
+		// sin((hour - 10) / 12 * π): hour=4→-1(最低), hour=16→+1(最高)
+		const tempPeak = 34;                         // 午后土壤最高温
+		const tempBase = 22;                         // 凌晨土壤最低温
+		const tempMid = (tempPeak + tempBase) / 2;   // 均值 28°C
+		const tempAmp = (tempPeak - tempBase) / 2;   // 振幅 6°C
+		const tempSin = Math.sin((hour - 10) / 12 * Math.PI);
+		const temperature = tempMid + tempAmp * tempSin;
 
-		// 湿度曲线：与温度相反，清晨最高(~78%)，午后最低(~35%)
-		const humHigh = 78;       // 清晨高湿
-		const humLow = 35;        // 午后低湿
-		const humidity = humLow + (humHigh - humLow) * Math.max(0, 1 - Math.abs((hour - 6) / 12));
-		// 夜间额外回湿
-		const nightBoost = (hour < 6 || hour >= 20) ? 8 : 0;
+		// ---- 土壤湿度 ----
+		// 与温度反向，湿度峰值 04:00(~82%)，谷值 16:00(~42%)
+		const humHigh = 82;                          // 凌晨高湿
+		const humLow = 42;                           // 午后低湿
+		const humMid = (humHigh + humLow) / 2;       // 均值 62%
+		const humAmp = (humHigh - humLow) / 2;       // 振幅 20%
+		const humidity = humMid - humAmp * tempSin;  // tempSin时湿度反向
 
 		return {
 			temperature: Math.round(temperature * 10) / 10,
-			humidity: Math.round((humidity + nightBoost) * 10) / 10
+			humidity: Math.round(humidity * 10) / 10
 		};
 	}
 
