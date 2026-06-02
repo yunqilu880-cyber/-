@@ -186,23 +186,47 @@ router.put('/orders/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   
-  const validStatuses = ['pending', 'paid', 'shipped', 'delivered', 'completed', 'cancelled'];
+  const validStatuses = ['pending', 'paid', 'shipped', 'delivered', 'completed', 'cancelled', 'refunded'];
   if (!validStatuses.includes(status)) {
     return res.status(400).json({ code: 400, msg: '无效的状态' });
   }
 
+  const connection = await pool.getConnection();
   try {
-    const updateFields = { status };
-    if (status === 'shipped') {
-      updateFields.shipped_at = new Date();
+    await connection.beginTransaction();
+
+    // 如果是退款完成，需要恢复库存并更新支付记录
+    if (status === 'refunded') {
+      const [orders] = await connection.query('SELECT * FROM orders WHERE id = ?', [id]);
+      if (orders.length === 0) {
+        await connection.rollback();
+        connection.release();
+        return res.status(404).json({ code: 404, msg: '订单不存在' });
+      }
+      // 恢复库存
+      const [items] = await connection.query('SELECT product_id, quantity FROM order_items WHERE order_id = ?', [id]);
+      for (const item of items) {
+        await connection.query(
+          'UPDATE products SET stock = stock + ?, sales = sales - ? WHERE id = ?',
+          [item.quantity, item.quantity, item.product_id]
+        );
+      }
+      // 注意：退款状态由 orders.status='refunded' 跟踪，payments 表维持 'success'
     }
 
-    const updates = Object.entries(updateFields)
-      .map(([key]) => `${key} = ?`)
-      .join(', ');
-    const values = Object.values(updateFields);
+    await connection.query("UPDATE orders SET status = ?, shipped_at = ? WHERE id = ?", [
+      status,
+      status === 'shipped' ? new Date() : null,
+      id,
+    ]);
 
-    await pool.query(`UPDATE orders SET ${updates} WHERE id = ?`, [...values, id]);
+    // 补充 shipped_at 逻辑
+    if (status === 'shipped') {
+      await connection.query("UPDATE orders SET shipped_at = NOW() WHERE id = ?", [id]);
+    }
+
+    await connection.commit();
+    connection.release();
     res.json({ code: 200, msg: '状态更新成功' });
   } catch (err) {
     console.error('更新订单状态失败:', err);

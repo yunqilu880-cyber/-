@@ -45,7 +45,7 @@ router.post(
         msg: '注册成功',
         data: {
           token,
-          user: { id: result.insertId, username, name: name || username },
+          user: { id: result.insertId, username, name: name || username, role: 'user' },
         },
       });
     } catch (err) {
@@ -92,7 +92,7 @@ router.post(
         msg: '登录成功',
         data: {
           token,
-          user: { id: user.id, username: user.username, name: user.name, avatar: user.avatar },
+          user: { id: user.id, username: user.username, name: user.name, avatar: user.avatar, role: user.role },
         },
       });
     } catch (err) {

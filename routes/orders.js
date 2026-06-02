@@ -303,6 +303,36 @@ router.put('/:id/cancel', async (req, res) => {
   }
 });
 
+// PUT /api/orders/:id/refund - 申请退款
+router.put('/:id/refund', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [orders] = await pool.query(
+      'SELECT * FROM orders WHERE id = ? AND user_id = ?',
+      [id, req.userId]
+    );
+    if (orders.length === 0) {
+      return res.status(404).json({ code: 404, msg: '订单不存在' });
+    }
+
+    const order = orders[0];
+    // 仅已支付或已发货的订单可申请退款
+    if (!['paid', 'shipped'].includes(order.status)) {
+      return res.status(400).json({ code: 400, msg: '当前订单状态不支持退款' });
+    }
+
+    await pool.query(
+      "UPDATE orders SET status = 'refunding' WHERE id = ?",
+      [id]
+    );
+
+    res.json({ code: 200, msg: '退款申请已提交，等待处理' });
+  } catch (err) {
+    console.error('申请退款失败:', err);
+    res.status(500).json({ code: 500, msg: '服务器错误' });
+  }
+});
+
 // PUT /api/orders/:id/confirm - 确认收货
 router.put('/:id/confirm', async (req, res) => {
   const { id } = req.params;

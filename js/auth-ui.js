@@ -37,17 +37,25 @@
     const existingCta = nav.querySelector('.nav-cta');
     
     if (isLoggedIn() && user) {
-      // 已登录：把登录按钮替换成 用户名 + 退出
+      // 已登录：把登录按钮替换成 用户名 + 后台(管理员) + 退出
       const displayName = user.name || user.username || '用户';
+      const isAdmin = user.role === 'admin';
       if (existingCta) {
         // 替换 nav-cta 为用户名链接
         existingCta.outerHTML = `<li><a href="user-center.html">👤 ${displayName}</a></li>`;
-        // 在用户名后面加退出按钮
         const userLi = nav.querySelector('a[href="user-center.html"]').parentElement;
+        // 管理员显示后台入口
+        if (isAdmin) {
+          userLi.insertAdjacentHTML('afterend', '<li><a href="admin.html" style="color:#F57C00;font-weight:700;">⚙️ 后台管理</a></li>');
+        }
+        // 退出按钮
         userLi.insertAdjacentHTML('afterend', '<li><a class="nav-cta" href="javascript:logout()">退出</a></li>');
       } else {
         // 没有 nav-cta 则追加
         nav.insertAdjacentHTML('beforeend', `<li><a href="user-center.html">👤 ${displayName}</a></li>`);
+        if (isAdmin) {
+          nav.insertAdjacentHTML('beforeend', '<li><a href="admin.html" style="color:#F57C00;font-weight:700;">⚙️ 后台管理</a></li>');
+        }
         nav.insertAdjacentHTML('beforeend', '<li><a class="nav-cta" href="javascript:logout()">退出</a></li>');
       }
     } else if (!isLoggedIn() && existingCta) {

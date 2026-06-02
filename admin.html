@@ -32,6 +32,7 @@
 		.badge-pending { background: #FFF3E0; color: #F57C00; } .badge-paid { background: #E3F2FD; color: #1976D2; }
 		.badge-shipped { background: #E8F5E9; color: #388E3C; } .badge-completed { background: #E8F5E9; color: #2E7D32; }
 		.badge-cancelled { background: #F5F5F5; color: #999; }
+		.badge-refunding { background: #FFE0B2; color: #E65100; } .badge-refunded { background: #F5F5F5; color: #999; }
 		.badge-on { background: #E8F5E9; color: #2E7D32; } .badge-off { background: #F5F5F5; color: #999; }
 		.form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
 		.form-row .field { flex: 1; min-width: 120px; }
@@ -133,7 +134,7 @@
 		let userPage=1, userKeyword='';
 		async function loadUserList() {
 			const c=document.getElementById('mainContent');
-			c.innerHTML='<h3 class="page-title">'+T('admin.users')+'</h3><div class="search-row"><input type="text" id="userSearch" placeholder="'+T('admin.search_placeholder')+'" value="'+userKeyword+'" onkeydown="if(event.key===\'Enter\')searchUsers()"><button onclick="searchUsers()">'+T('admin.search_btn')+'</button></div><div class="table-container"><div id="userTable"><div class="empty">'+T('user.loading')+'</div></div></div><div class="pagination" id="userPager"></div>';
+			c.innerHTML='<h3 class="page-title">'+T('admin.users')+'</h3><div class="search-row"><input type="text" id="userSearch" placeholder="'+T('admin.search_placeholder')+'" value="'+userKeyword+'" onkeydown="if(event.key===\'Enter\')searchUsers()"><button onclick="searchUsers()">'+T('admin.search_btn')+'</button></div><div class="table-container"><div id="userTable"></div></div><div class="pagination" id="userPager"></div>';
 			await fetchUsers();
 		}
 		function searchUsers() { userKeyword = document.getElementById('userSearch').value.trim(); userPage = 1; fetchUsers(); }
@@ -150,7 +151,7 @@
 			const c=document.getElementById('userTable');
 			if(r.list.length===0){c.innerHTML='<div class="empty">'+T('admin.no_users')+'</div>';document.getElementById('userPager').innerHTML='';return}
 			const sm={user:T('admin.role_user'),admin:T('admin.role_admin')};
-			c.innerHTML='<table><thead><tr><th>ID</th><th>'+T('login.username')+'</th><th>'+T('user.profile_nickname')+'</th><th>'+T('admin.role_admin')+'</th><th>'+T('admin.role_user')+'</th><th>'+T('admin.role_admin').replace('管理员','注册时间')+'</th><th>'+T('admin.role_user').replace('普通用户','操作')+'</th></tr></thead><tbody>'+r.list.map(u=>'<tr><td>'+u.id+'</td><td>'+u.username+'</td><td>'+(u.name||'-')+'</td><td><span class="badge '+(u.role==='admin'?'badge-admin':'badge-user')+'">'+(sm[u.role]||u.role)+'</span></td><td>'+new Date(u.created_at).toLocaleString('zh-CN')+'</td><td>'+(u.role!=='admin'?'<button class="btn-sm btn-warning" onclick="setAdmin('+u.id+')">'+T('admin.set_admin')+'</button>':'<button class="btn-sm btn-outline" onclick="setUser('+u.id+')">'+T('admin.unset_admin')+'</button>')+(u.role!=='admin'?'<button class="btn-sm btn-danger" onclick="deleteUser('+u.id+')" style="margin-left:6px;">'+T('admin.delete')+'</button>':'')+'</td></tr>').join('')+'</tbody></table>';
+			c.innerHTML='<table><thead><tr><th>ID</th><th>'+T('login.username')+'</th><th>'+T('user.profile_nickname')+'</th><th>角色</th><th>注册时间</th><th>操作</th></tr></thead><tbody>'+r.list.map(u=>'<tr><td>'+u.id+'</td><td>'+u.username+'</td><td>'+(u.name||'-')+'</td><td><span class="badge '+(u.role==='admin'?'badge-admin':'badge-user')+'">'+(sm[u.role]||u.role)+'</span></td><td>'+new Date(u.created_at).toLocaleString('zh-CN')+'</td><td>'+(u.role!=='admin'?'<button class="btn-sm btn-warning" onclick="setAdmin('+u.id+')">'+T('admin.set_admin')+'</button>':'<button class="btn-sm btn-outline" onclick="setUser('+u.id+')">'+T('admin.unset_admin')+'</button>')+(u.role!=='admin'?'<button class="btn-sm btn-danger" onclick="deleteUser('+u.id+')" style="margin-left:6px;">'+T('admin.delete')+'</button>':'')+'</td></tr>').join('')+'</tbody></table>';
 			renderPager(r,'userPager','goUserPage');
 		}
 		function goUserPage(p){userPage=p;fetchUsers();}
@@ -162,7 +163,7 @@
 		let productPage=1,productKeyword='',productCategory='',productOnSale='';
 		async function loadProductList(){
 			const c=document.getElementById('mainContent');
-			c.innerHTML='<h3 class="page-title">'+T('admin.products')+'</h3><div class="search-row"><input id="productSearch" placeholder="'+T('admin.product_search_ph')+'" value="'+productKeyword+'"><select id="productCategoryFilter"><option value="">'+T('admin.all_cats')+'</option></select><select id="productOnSaleFilter"><option value="">'+T('admin.all_status')+'</option><option value="1">'+T('admin.on_sale')+'</option><option value="0">'+T('admin.off_sale')+'</option></select><button onclick="searchProducts()">'+T('admin.search_btn')+'</button><button onclick="showProductForm()" style="background:#F57C00">'+T('admin.add_product')+'</button></div><div class="table-container"><div id="productTable"><div class="empty">'+T('user.loading')+'</div></div></div><div class="pagination" id="productPager"></div>';
+			c.innerHTML='<h3 class="page-title">'+T('admin.products')+'</h3><div class="search-row"><input id="productSearch" placeholder="'+T('admin.product_search_ph')+'" value="'+productKeyword+'"><select id="productCategoryFilter"><option value="">'+T('admin.all_cats')+'</option></select><select id="productOnSaleFilter"><option value="">'+T('admin.all_status')+'</option><option value="1">'+T('admin.on_sale')+'</option><option value="0">'+T('admin.off_sale')+'</option></select><button onclick="searchProducts()">'+T('admin.search_btn')+'</button><button onclick="showProductForm()" style="background:#F57C00">'+T('admin.add_product')+'</button></div><div class="table-container"><div id="productTable"></div></div><div class="pagination" id="productPager"></div>';
 			loadCategoryOptions();fetchProducts();
 		}
 		async function loadCategoryOptions(){try{const d=await api('/admin/categories');if(d.code===200){const s=document.getElementById('productCategoryFilter');d.data.forEach(c=>{s.innerHTML+='<option value="'+c.id+'">'+c.icon+' '+c.name+'</option>'});if(productCategory)s.value=productCategory}}catch(e){}}
@@ -173,7 +174,7 @@
 		function renderProducts(r){
 			const c=document.getElementById('productTable');
 			if(r.list.length===0){c.innerHTML='<div class="empty">'+T('admin.no_products')+'</div>';document.getElementById('productPager').innerHTML='';return}
-			c.innerHTML='<table><thead><tr><th>ID</th><th>'+T('admin.product_name')+'</th><th>'+T('admin.category')+'</th><th>'+T('admin.price')+'</th><th>'+T('admin.stock')+'</th><th>销量</th><th>状态</th><th>'+T('admin.role_user').replace('普通用户','操作')+'</th></tr></thead><tbody>'+r.list.map(p=>'<tr><td>'+p.id+'</td><td>'+p.name+'</td><td>'+(p.category_name||'-')+'</td><td>¥'+p.price+'</td><td>'+p.stock+'</td><td>'+p.sales+'</td><td><span class="badge '+(p.is_on_sale?'badge-on':'badge-off')+'">'+(p.is_on_sale?T('admin.on'):T('admin.off'))+'</span></td><td><button class="btn-sm btn-outline" onclick="showProductForm('+p.id+')">'+T('admin.edit')+'</button> <button class="btn-sm '+(p.is_on_sale?'btn-warning':'btn-success')+'" onclick="toggleProduct('+p.id+')">'+(p.is_on_sale?T('admin.toggle_off'):T('admin.toggle_on'))+'</button> <button class="btn-sm btn-danger" onclick="deleteProduct('+p.id+')">'+T('admin.delete')+'</button></td></tr>').join('')+'</tbody></table>';
+			c.innerHTML='<table><thead><tr><th>ID</th><th>'+T('admin.product_name')+'</th><th>'+T('admin.category')+'</th><th>'+T('admin.price')+'</th><th>'+T('admin.stock')+'</th><th>销量</th><th>状态</th><th>操作</th></tr></thead><tbody>'+r.list.map(p=>'<tr><td>'+p.id+'</td><td>'+p.name+'</td><td>'+(p.category_name||'-')+'</td><td>¥'+p.price+'</td><td>'+p.stock+'</td><td>'+p.sales+'</td><td><span class="badge '+(p.is_on_sale?'badge-on':'badge-off')+'">'+(p.is_on_sale?T('admin.on'):T('admin.off'))+'</span></td><td><button class="btn-sm btn-outline" onclick="showProductForm('+p.id+')">'+T('admin.edit')+'</button> <button class="btn-sm '+(p.is_on_sale?'btn-warning':'btn-success')+'" onclick="toggleProduct('+p.id+')">'+(p.is_on_sale?T('admin.toggle_off'):T('admin.toggle_on'))+'</button> <button class="btn-sm btn-danger" onclick="deleteProduct('+p.id+')">'+T('admin.delete')+'</button></td></tr>').join('')+'</tbody></table>';
 			renderPager(r,'productPager','goProductPage');
 		}
 		function goProductPage(p){productPage=p;fetchProducts();}
@@ -181,21 +182,48 @@
 			let title=editId?T('admin.edit_product_title'):T('admin.add_product_title'),pp={name:'',description:'',price:'',original_price:'',stock:'',image:'',category_id:'',badge:'',weight:'',specs:'',is_featured:0,is_on_sale:1};
 			if(editId){const d=await api('/admin/products?pageSize=200');if(d.code===200){const f=d.data.list.find(x=>x.id===editId);if(f)pp=f}}
 			try{const cd=await api('/admin/categories');const catOpts=cd.code===200?cd.data.map(c=>'<option value="'+c.id+'"'+(pp.category_id==c.id?' selected':'')+'>'+c.icon+' '+c.name+'</option>').join(''):'';
-			document.getElementById('modalContent').innerHTML='<button class="close-btn" onclick="closeModal()">✕</button><h3>'+title+'</h3><form id="productForm"><div class="form-row"><div class="field"><label>'+T('admin.product_name')+'</label><input name="name" value="'+pp.name+'" required></div><div class="field"><label>'+T('admin.category')+'</label><select name="category_id"><option value="">无</option>'+catOpts+'</select></div></div><div class="form-row"><div class="field"><label>'+T('admin.price')+'</label><input name="price" type="number" step="0.01" value="'+pp.price+'"></div><div class="field"><label>'+T('admin.original_price')+'</label><input name="original_price" type="number" step="0.01" value="'+(pp.original_price||'')+'"></div><div class="field"><label>'+T('admin.stock')+'</label><input name="stock" type="number" value="'+(pp.stock||0)+'"></div></div><div class="form-row"><div class="field"><label>'+T('admin.badge')+'</label><input name="badge" value="'+(pp.badge||'')+'"></div><div class="field"><label>'+T('admin.weight')+'</label><input name="weight" value="'+(pp.weight||'')+'"></div><div class="field"><label>'+T('admin.featured')+'</label><select name="is_featured"><option value="0"'+(pp.is_featured==0?' selected':'')+'>否</option><option value="1"'+(pp.is_featured==1?' selected':'')+'>是</option></select></div></div><div class="form-row"><div class="field"><label>'+T('admin.description')+'</label><textarea name="description" rows="2">'+(pp.description||'')+'</textarea></div></div><div class="form-row"><div class="field"><label>'+T('admin.specs')+'</label><textarea name="specs" rows="3">'+(pp.specs||'')+'</textarea></div></div><button type="submit" class="btn-sm btn-success" style="padding:10px 24px;font-size:14px;">'+T('user.btn_save')+'</button>'+(editId?'<button type="button" class="btn-sm btn-danger" style="margin-left:8px;padding:10px 24px;font-size:14px;" onclick="deleteProduct('+editId+');closeModal()">'+T('admin.delete')+'</button>':'')+'</form>';
-			document.getElementById('productForm').addEventListener('submit',async function(e){e.preventDefault();const fd=new FormData(this);const body={};for(let[k,v]of fd)body[k]=v;body.is_featured=parseInt(body.is_featured);body.category_id=body.category_id||null;body.price=parseFloat(body.price);body.original_price=body.original_price?parseFloat(body.original_price):null;body.stock=parseInt(body.stock);const url=editId?'/admin/products/'+editId:'/admin/products';const method=editId?'PUT':'POST';const r=await api(url,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(r.code===200){showToast(title+T('user.btn_save').replace('保 存','成功'));closeModal();fetchProducts()}else showToast(r.msg)});
+			document.getElementById('modalContent').innerHTML='<button class="close-btn" onclick="closeModal()">✕</button><h3>'+title+'</h3><form id="productForm"><div class="form-row"><div class="field"><label>'+T('admin.product_name')+'</label><input name="name" value="'+pp.name+'" required></div><div class="field"><label>'+T('admin.category')+'</label><select name="category_id"><option value="">无</option>'+catOpts+'</select></div></div><div class="form-row"><div class="field"><label>'+T('admin.price')+'</label><input name="price" type="number" step="0.01" value="'+pp.price+'"></div><div class="field"><label>'+T('admin.original_price')+'</label><input name="original_price" type="number" step="0.01" value="'+(pp.original_price||'')+'"></div><div class="field"><label>'+T('admin.stock')+'</label><input name="stock" type="number" value="'+(pp.stock||0)+'"></div></div><div class="form-row"><div class="field"><label>'+T('admin.badge')+'</label><input name="badge" value="'+(pp.badge||'')+'"></div><div class="field"><label>'+T('admin.weight')+'</label><input name="weight" value="'+(pp.weight||'')+'"></div><div class="field"><label>'+T('admin.featured')+'</label><select name="is_featured"><option value="0"'+(pp.is_featured==0?' selected':'')+'>否</option><option value="1"'+(pp.is_featured==1?' selected':'')+'>是</option></select></div></div><div class="form-row"><div class="field"><label>商品图片</label><div style="display:flex;gap:6px;"><input name="image" id="productImageInput" value="'+(pp.image||'')+'" placeholder="图片URL或点击上传" style="flex:1;"><input type="file" id="productImageFile" accept="image/*" style="display:none;" onchange="uploadProductImage()"><button type="button" class="btn-sm btn-outline" onclick="document.getElementById(\'productImageFile\').click()" style="white-space:nowrap;">📷 上传</button></div>'+(pp.image?'<div style="margin-top:6px;"><img src="'+pp.image+'" style="max-width:120px;max-height:80px;border-radius:8px;border:1px solid #E0E0E0;"></div>':'')+'</div></div><div class="form-row"><div class="field"><label>'+T('admin.description')+'</label><textarea name="description" rows="2">'+(pp.description||'')+'</textarea></div></div><div class="form-row"><div class="field"><label>'+T('admin.specs')+'</label><textarea name="specs" rows="3">'+(pp.specs||'')+'</textarea></div></div><button type="submit" class="btn-sm btn-success" style="padding:10px 24px;font-size:14px;">'+T('user.btn_save')+'</button>'+(editId?'<button type="button" class="btn-sm btn-danger" style="margin-left:8px;padding:10px 24px;font-size:14px;" onclick="deleteProduct('+editId+');closeModal()">'+T('admin.delete')+'</button>':'')+'</form>';
+			document.getElementById('productForm').addEventListener('submit',async function(e){e.preventDefault();const fd=new FormData(this);const body={};for(let[k,v]of fd)body[k]=v;body.is_featured=parseInt(body.is_featured);body.category_id=body.category_id||null;body.price=parseFloat(body.price);body.original_price=body.original_price?parseFloat(body.original_price):null;body.stock=parseInt(body.stock);const url=editId?'/admin/products/'+editId:'/admin/products';const method=editId?'PUT':'POST';const r=await api(url,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(r.code===200){showToast(title.replace('添加商品','商品')+T('user.btn_save').replace('保 存','成功'));closeModal();fetchProducts()}else showToast(r.msg)});
 			document.getElementById('modalOverlay').classList.add('show')}catch(e){showToast(T('admin.load_failed'))}
+		}
+
+		async function uploadProductImage() {
+			const fileInput = document.getElementById('productImageFile');
+			const file = fileInput.files[0];
+			if (!file) return;
+			if (!file.type.startsWith('image/')) { showToast('请选择图片文件'); return; }
+			if (file.size > 5 * 1024 * 1024) { showToast('图片大小不能超过 5MB'); return; }
+			showToast('上传中...');
+			const fd = new FormData();
+			fd.append('file', file);
+			try {
+				const res = await fetch(API_BASE + '/upload', {
+					method: 'POST',
+					headers: { 'Authorization': 'Bearer ' + token },
+					body: fd
+				});
+				const data = await res.json();
+				if (data.code === 200) {
+					document.getElementById('productImageInput').value = data.data.url;
+					showToast('图片上传成功');
+				} else {
+					showToast(data.msg || '上传失败');
+				}
+			} catch (err) {
+				showToast('上传失败：网络错误');
+			}
 		}
 		async function toggleProduct(id){const d=await api('/admin/products/'+id+'/toggle',{method:'PUT'});if(d.code===200){showToast(d.msg);fetchProducts()}else showToast(d.msg)}
 		async function deleteProduct(id){if(!confirm(T('admin.confirm_delete_product')))return;const d=await api('/admin/products/'+id,{method:'DELETE'});if(d.code===200){showToast(T('admin.toast_product_deleted'));fetchProducts()}else showToast(d.msg)}
 
 		async function loadCategoryList(){
 			const c=document.getElementById('mainContent');
-			c.innerHTML='<h3 class="page-title">'+T('admin.categories')+'</h3><button class="btn-sm btn-warning" onclick="showCategoryForm()" style="padding:8px 20px;margin-bottom:12px;">'+T('admin.add_cat')+'</button><div class="table-container"><div id="categoryTable"><div class="empty">'+T('user.loading')+'</div></div></div>';
+			c.innerHTML='<h3 class="page-title">'+T('admin.categories')+'</h3><button class="btn-sm btn-warning" onclick="showCategoryForm()" style="padding:8px 20px;margin-bottom:12px;">'+T('admin.add_cat')+'</button><div class="table-container"><div id="categoryTable"></div></div>';
 			fetchCategories()
 		}
 		async function fetchCategories(){
 			try{const d=await api('/admin/categories');if(d.code===200){const tbl=document.getElementById('categoryTable');if(d.data.length===0){tbl.innerHTML='<div class="empty">'+T('admin.no_categories')+'</div>';return}
-			tbl.innerHTML='<table><thead><tr><th>ID</th><th>图标</th><th>名称</th><th>排序</th><th>'+T('admin.role_user').replace('普通用户','操作')+'</th></tr></thead><tbody>'+d.data.map(c=>'<tr><td>'+c.id+'</td><td>'+c.icon+'</td><td>'+c.name+'</td><td>'+c.sort_order+'</td><td><button class="btn-sm btn-outline" onclick="showCategoryForm('+c.id+')">'+T('admin.edit')+'</button> <button class="btn-sm btn-danger" onclick="deleteCategory('+c.id+')">'+T('admin.delete')+'</button></td></tr>').join('')+'</tbody></table>'}else tbl.innerHTML='<div class="empty" style="color:#E53935;">'+d.msg+'</div>'}catch(e){document.getElementById('categoryTable').innerHTML='<div class="empty" style="color:#E53935;">'+T('admin.load_failed')+'</div>'}
+			tbl.innerHTML='<table><thead><tr><th>ID</th><th>图标</th><th>名称</th><th>排序</th><th>操作</th></tr></thead><tbody>'+d.data.map(c=>'<tr><td>'+c.id+'</td><td>'+c.icon+'</td><td>'+c.name+'</td><td>'+c.sort_order+'</td><td><button class="btn-sm btn-outline" onclick="showCategoryForm('+c.id+')">'+T('admin.edit')+'</button> <button class="btn-sm btn-danger" onclick="deleteCategory('+c.id+')">'+T('admin.delete')+'</button></td></tr>').join('')+'</tbody></table>'}else tbl.innerHTML='<div class="empty" style="color:#E53935;">'+d.msg+'</div>'}catch(e){document.getElementById('categoryTable').innerHTML='<div class="empty" style="color:#E53935;">'+T('admin.load_failed')+'</div>'}
 		}
 		function showCategoryForm(editId){
 			let title=editId?T('admin.edit_cat_title'):T('admin.add_cat_title'),cc={name:'',icon:'',sort_order:0};
@@ -209,10 +237,11 @@
 		}
 		async function deleteCategory(id){if(!confirm(T('admin.confirm_delete_cat')))return;const d=await api('/admin/categories/'+id,{method:'DELETE'});if(d.code===200){showToast(T('admin.toast_cat_deleted'));fetchCategories()}else showToast(d.msg)}
 
+		// ==================== 订单管理（含退款处理）====================
 		let orderPage = 1, orderStatus = '', orderKeyword = '';
 		async function loadOrderList() {
 			const c=document.getElementById('mainContent');
-			c.innerHTML='<h3 class="page-title">'+T('admin.orders')+'</h3><div class="search-row"><select id="orderStatusFilter" onchange="filterOrders()"><option value="">'+T('admin.all_status')+'</option><option value="pending">'+T('admin.status_pending')+'</option><option value="paid">'+T('admin.status_paid')+'</option><option value="shipped">'+T('admin.status_shipped')+'</option><option value="delivered">'+T('admin.status_delivered')+'</option><option value="completed">'+T('admin.status_completed')+'</option><option value="cancelled">'+T('admin.status_cancelled')+'</option></select><input type="text" id="orderSearch" placeholder="'+T('admin.order_search_ph')+'" value="'+orderKeyword+'" onkeydown="if(event.key===\'Enter\')searchOrders()"><button onclick="searchOrders()">'+T('admin.search_btn')+'</button></div><div class="table-container"><div id="orderTable"><div class="empty">'+T('user.loading')+'</div></div></div><div class="pagination" id="orderPager"></div>';
+			c.innerHTML='<h3 class="page-title">'+T('admin.orders')+'</h3><div class="search-row"><select id="orderStatusFilter" onchange="filterOrders()"><option value="">'+T('admin.all_status')+'</option><option value="pending">'+T('admin.status_pending')+'</option><option value="paid">'+T('admin.status_paid')+'</option><option value="shipped">'+T('admin.status_shipped')+'</option><option value="completed">'+T('admin.status_completed')+'</option><option value="cancelled">'+T('admin.status_cancelled')+'</option><option value="refunding">退款中</option><option value="refunded">已退款</option></select><input type="text" id="orderSearch" placeholder="'+T('admin.order_search_ph')+'" value="'+orderKeyword+'" onkeydown="if(event.key===\'Enter\')searchOrders()"><button onclick="searchOrders()">'+T('admin.search_btn')+'</button></div><div class="table-container"><div id="orderTable"></div></div><div class="pagination" id="orderPager"></div>';
 			await fetchOrders();
 		}
 		function filterOrders(){orderStatus=document.getElementById('orderStatusFilter').value;orderPage=1;fetchOrders();}
@@ -220,11 +249,17 @@
 		async function fetchOrders(){
 			try{const p=new URLSearchParams({page:orderPage,pageSize:15});if(orderStatus)p.append('status',orderStatus);if(orderKeyword)p.append('keyword',orderKeyword);const d=await api('/admin/orders?'+p.toString());if(d.code===200)renderOrders(d.data);else document.getElementById('orderTable').innerHTML='<div class="empty" style="color:#E53935;">'+d.msg+'</div>'}catch(e){document.getElementById('orderTable').innerHTML='<div class="empty" style="color:#E53935;">'+T('admin.load_failed')+'</div>'}
 		}
-		const osm={pending:T('admin.status_pending'),paid:T('admin.status_paid'),shipped:T('admin.status_shipped'),delivered:T('admin.status_delivered'),completed:T('admin.status_completed'),cancelled:T('admin.status_cancelled'),refunding:T('user.status_refunding'),refunded:T('user.status_refunded')};
+		const osm={pending:T('admin.status_pending'),paid:T('admin.status_paid'),shipped:T('admin.status_shipped'),delivered:T('user.status_delivered'),completed:T('admin.status_completed'),cancelled:T('admin.status_cancelled'),refunding:'退款中',refunded:'已退款'};
 		function renderOrders(r){
 			const c=document.getElementById('orderTable');
 			if(r.list.length===0){c.innerHTML='<div class="empty">'+T('admin.no_orders')+'</div>';document.getElementById('orderPager').innerHTML='';return}
-			c.innerHTML='<table><thead><tr><th>ID</th><th>'+T('user.order_no')+'</th><th>'+T('login.username')+'</th><th>'+T('user.addr_name')+'</th><th>金额</th><th>状态</th><th>时间</th><th>'+T('admin.role_user').replace('普通用户','操作')+'</th></tr></thead><tbody>'+r.list.map(o=>'<tr><td>'+o.id+'</td><td title="'+o.order_no+'">'+o.order_no.substring(o.order_no.length-12)+'</td><td>'+(o.username||'ID:'+o.user_id)+'</td><td>'+o.receiver_name+'<br><small style="color:#999;">'+o.receiver_phone+'</small></td><td style="font-weight:700;color:#E53935;">¥'+o.total_amount+'</td><td><span class="badge badge-'+o.status+'">'+(osm[o.status]||o.status)+'</span></td><td>'+new Date(o.created_at).toLocaleString('zh-CN')+'</td><td><button class="btn-sm btn-outline" onclick="viewOrderDetail('+o.id+')">'+T('admin.detail')+'</button>'+(o.status==='paid'?'<button class="btn-sm btn-success" onclick="updateOrderStatus('+o.id+',\'shipped\')" style="margin-left:4px;">'+T('admin.ship')+'</button>':'')+(o.status==='shipped'?'<button class="btn-sm btn-success" onclick="updateOrderStatus('+o.id+',\'completed\')" style="margin-left:4px;">'+T('admin.complete')+'</button>':'')+'</td></tr>').join('')+'</tbody></table>';
+			c.innerHTML='<table><thead><tr><th>ID</th><th>'+T('user.order_no')+'</th><th>'+T('login.username')+'</th><th>'+T('user.addr_name')+'</th><th>金额</th><th>状态</th><th>时间</th><th>操作</th></tr></thead><tbody>'+r.list.map(o=>{
+				let actions = '<button class="btn-sm btn-outline" onclick="viewOrderDetail('+o.id+')">'+T('admin.detail')+'</button>';
+				if (o.status==='paid') actions += '<button class="btn-sm btn-success" onclick="updateOrderStatus('+o.id+',\'shipped\')" style="margin-left:4px;">'+T('admin.ship')+'</button>';
+				if (o.status==='shipped') actions += '<button class="btn-sm btn-success" onclick="updateOrderStatus('+o.id+',\'completed\')" style="margin-left:4px;">'+T('admin.complete')+'</button>';
+				if (o.status==='refunding') actions += '<button class="btn-sm btn-danger" onclick="approveRefund('+o.id+')" style="margin-left:4px;">同意退款</button>';
+				return '<tr><td>'+o.id+'</td><td title="'+o.order_no+'">'+o.order_no.substring(o.order_no.length-12)+'</td><td>'+(o.username||'ID:'+o.user_id)+'</td><td>'+o.receiver_name+'<br><small style="color:#999;">'+o.receiver_phone+'</small></td><td style="font-weight:700;color:#E53935;">¥'+o.total_amount+'</td><td><span class="badge badge-'+o.status+'">'+(osm[o.status]||o.status)+'</span></td><td>'+new Date(o.created_at).toLocaleString('zh-CN')+'</td><td>'+actions+'</td></tr>';
+			}).join('')+'</tbody></table>';
 			renderPager(r,'orderPager','goOrderPage');
 		}
 		function goOrderPage(p){orderPage=p;fetchOrders();}
@@ -233,6 +268,11 @@
 			if(!confirm((lb[status]||T('admin.confirm_update'))+'？'))return;
 			const d=await api('/admin/orders/'+oid+'/status',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
 			if(d.code===200){showToast(T('admin.toast_status_updated'));fetchOrders()}else showToast(d.msg)
+		}
+		async function approveRefund(oid) {
+			if (!confirm('确认退款？系统将自动恢复库存。')) return;
+			const d = await api('/admin/orders/'+oid+'/status', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'refunded' }) });
+			if (d.code === 200) { showToast('退款已处理，库存已恢复'); fetchOrders(); } else showToast(d.msg);
 		}
 		async function viewOrderDetail(oid){
 			try{const d=await api('/admin/orders/'+oid);if(d.code===200){const o=d.data;const items=(o.items||[]).map(i=>'<tr><td>'+i.product_name+'</td><td>¥'+i.product_price+'</td><td>×'+i.quantity+'</td><td style="font-weight:700;">¥'+(i.product_price*i.quantity).toFixed(2)+'</td></tr>').join('');

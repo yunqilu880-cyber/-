@@ -10,7 +10,7 @@
     "db:seed": "node config/init-db.js --seed",
     "db:products": "node config/init-db.js --products",
     "db:tables": "node config/init-db.js --tables",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/api.test.js"
   },
   "repository": {
     "type": "git",
@@ -34,7 +34,8 @@
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
-    "mysql2": "^3.22.4"
+    "mysql2": "^3.22.4",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

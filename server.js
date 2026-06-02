@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const logger = require('./config/logger');
 require('dotenv').config();
 
 const app = express();
@@ -77,6 +81,63 @@ app.use('/api/admin', require('./routes/admin'));
 // 健康检查
 app.get('/api/health', (req, res) => {
   res.json({ code: 200, msg: 'ok', time: new Date().toISOString() });
+});
+
+// ========== 图片上传 ==========
+
+// 确保 uploads 目录存在
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// multer 配置：限制 5MB，仅允许图片
+const storage = multer.diskStorage({
+  destination: uploadsDir,
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9) + ext;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (req, file, cb) => {
+    const allowed = /\.(jpg|jpeg|png|gif|webp)$/i;
+    if (allowed.test(path.extname(file.originalname))) {
+      cb(null, true);
+    } else {
+      cb(new Error('仅支持 jpg/png/gif/webp 格式的图片'));
+    }
+  },
+});
+
+// 上传接口（需要管理员登录）
+app.post('/api/upload', require('./middleware/auth'), upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ code: 400, msg: '请选择文件' });
+  }
+  const url = '/uploads/' + req.file.filename;
+  res.json({ code: 200, msg: '上传成功', data: { url, filename: req.file.filename } });
+});
+
+// 上传目录静态服务
+app.use('/uploads', express.static(uploadsDir));
+
+// multer 错误处理中间件
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ code: 400, msg: '文件大小不能超过 5MB' });
+    }
+    return res.status(400).json({ code: 400, msg: err.message });
+  }
+  if (err.message && err.message.includes('仅支持')) {
+    return res.status(400).json({ code: 400, msg: err.message });
+  }
+  next(err);
 });
 
 // 404

@@ -23,6 +23,7 @@
 		.order-item .order-status { font-weight: 700; font-size: 14px; }
 		.status-pending { color: #F57C00; } .status-paid { color: #1976D2; } .status-shipped { color: #388E3C; }
 		.status-delivered { color: #2E7D32; } .status-completed { color: #2E7D32; } .status-cancelled { color: #999; }
+		.status-refunding { color: #E65100; } .status-refunded { color: #999; }
 		.order-item .order-product { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
 		.order-item .order-product img { width: 60px; height: 60px; border-radius: 8px; background: #E8F5E9; object-fit: cover; }
 		.order-item .order-info { flex: 1; }
@@ -216,9 +217,11 @@
 						'<div class="meta">'+new Date(o.created_at).toLocaleString('zh-CN')+' | '+o.receiver_name+' '+o.receiver_phone+' | '+o.receiver_address+'</div></div></div>'+
 						'<div class="order-actions">'+
 						(o.status==='pending'?'<button onclick="payOrder('+o.id+')" style="border-color:#1976D2;color:#1976D2;">'+T('user.btn_pay')+'</button><button class="danger" onclick="cancelOrder('+o.id+')">'+T('user.btn_cancel')+'</button>':'')+
-						(o.status==='paid'?'<span style="color:#1976D2;font-size:13px;">'+T('user.waiting_ship')+'</span>':'')+
-						(o.status==='shipped'?'<button onclick="confirmOrder('+o.id+')">'+T('user.btn_confirm')+'</button>':'')+
+						(o.status==='paid'?'<span style="color:#1976D2;font-size:13px;">'+T('user.waiting_ship')+'</span><button class="danger" onclick="refundOrder('+o.id+')" style="margin-left:8px;">退款</button>':'')+
+						(o.status==='shipped'?'<button onclick="confirmOrder('+o.id+')">'+T('user.btn_confirm')+'</button><button class="danger" onclick="refundOrder('+o.id+')" style="margin-left:8px;">退款</button>':'')+
 						(o.status==='completed'?'<span style="color:#2E7D32;font-size:13px;">'+T('user.completed_label')+'</span>':'')+
+						(o.status==='refunding'?'<span style="color:#E65100;font-size:13px;">退款处理中</span>':'')+
+						(o.status==='refunded'?'<span style="color:#999;font-size:13px;">已退款</span>':'')+
 						'</div></div>').join('');
 					if (totalPages > 1) {
 						let pg = '<button onclick="loadOrders('+(page-1)+')" '+(page<=1?'disabled':'')+'>‹</button>';
@@ -258,6 +261,15 @@
 				const res = await fetch(API_BASE + '/orders/' + id + '/confirm', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token } });
 				const data = await res.json();
 				if (data.code === 200) { showToast(T('user.receive_success')); loadOrders(); } else showToast(data.msg);
+			} catch (err) { showToast(T('user.op_failed')); }
+		}
+
+		async function refundOrder(id) {
+			if (!confirm('确定申请退款？')) return;
+			try {
+				const res = await fetch(API_BASE + '/orders/' + id + '/refund', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token } });
+				const data = await res.json();
+				if (data.code === 200) { showToast('退款申请已提交'); loadOrders(); } else showToast(data.msg);
 			} catch (err) { showToast(T('user.op_failed')); }
 		}
 
