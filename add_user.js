@@ -28,7 +28,6 @@ require('dotenv').config();
   }
   const hash = await bcrypt.hash(password, 10);
 
-
   // 创建管理员账号
   await connection.query(
     'INSERT INTO users (username, password, name) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE password = ?, name = ?',
