@@ -1,12 +1,19 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
+const requiredEnv = (name) => {
+  if (!process.env[name]) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return process.env[name];
+};
+
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
+  host: requiredEnv('DB_HOST'),
   port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER || 'your_database_user',
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME || 'chase_shop',
+  user: requiredEnv('DB_USER'),
+  password: requiredEnv('DB_PASSWORD'),
+  database: requiredEnv('DB_NAME'),
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,

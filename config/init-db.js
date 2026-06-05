@@ -12,6 +12,13 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') }
 const fs = require('fs');
 const path = require('path');
 
+const requiredEnv = (name) => {
+  if (!process.env[name]) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return process.env[name];
+};
+
 // ==========================================
 // 工具函数
 // ==========================================
@@ -102,10 +109,10 @@ async function main() {
     // 连接（不指定数据库 → 先建库；已指定 → 直接使用）
     if (mode === '--full' || mode === '--tables') {
       connection = await mysql.createConnection({
-        host: process.env.DB_HOST || 'localhost',
+        host: requiredEnv('DB_HOST'),
         port: process.env.DB_PORT || 3306,
-        user: process.env.DB_USER || 'your_database_user',
-        password: process.env.DB_PASSWORD,
+        user: requiredEnv('DB_USER'),
+        password: requiredEnv('DB_PASSWORD'),
         charset: 'utf8mb4',
       });
 
@@ -118,11 +125,11 @@ async function main() {
       await connection.query('USE chase_shop');
     } else {
       connection = await mysql.createConnection({
-        host: process.env.DB_HOST || 'localhost',
+        host: requiredEnv('DB_HOST'),
         port: process.env.DB_PORT || 3306,
-        user: process.env.DB_USER || 'your_database_user',
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME || 'chase_shop',
+        user: requiredEnv('DB_USER'),
+        password: requiredEnv('DB_PASSWORD'),
+        database: requiredEnv('DB_NAME'),
         charset: 'utf8mb4',
       });
     }

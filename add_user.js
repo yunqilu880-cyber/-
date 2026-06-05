@@ -22,7 +22,10 @@ require('dotenv').config();
   });
 
   // 密码哈希
-  const password = process.env.ADMIN_PASSWORD || 'changeme';  // ⚠️ 开发测试用，生产请修改为强密码
+  const password = process.env.ADMIN_PASSWORD;
+  if (!password) {
+    throw new Error('Missing required environment variable: ADMIN_PASSWORD');
+  }
   const hash = await bcrypt.hash(password, 10);
 
 
